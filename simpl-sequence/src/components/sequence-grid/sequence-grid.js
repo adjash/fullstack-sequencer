@@ -6,6 +6,7 @@ export class SequenceGrid {
     this.mountEl = mountEl;
     this.el = document.createElement("div");
     this.rowsEl = null;
+    this.handleAddRow = this.handleAddRow.bind(this);
   }
 
   init() {
@@ -27,12 +28,14 @@ export class SequenceGrid {
 
     this.el
       .querySelector('[data-hook="add-beat-row"]')
-      .addEventListener("click", () => {
-        this.store.addRow({
-          name: "tester",
-          steps: [],
-        });
-      });
+      .addEventListener("click", this.handleAddRow);
+  }
+
+  handleAddRow() {
+    this.store.addRow({
+      name: "tester",
+      steps: [],
+    });
   }
 
   renderRows() {
