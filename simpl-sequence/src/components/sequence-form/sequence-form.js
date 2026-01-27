@@ -1,15 +1,10 @@
 import { SequenceGrid } from "../sequence-grid/sequence-grid";
 
 export class SequenceForm {
-  constructor(mountEl) {
+  constructor(store, mountEl) {
     this.mountEl = mountEl;
     this.el = document.createElement("form");
-
-    this.state = {
-      bpm: 80,
-      beatsInBar: 4,
-      barCount: 4,
-    };
+    this.store = store;
   }
 
   init() {
@@ -39,7 +34,8 @@ export class SequenceForm {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const beatData = Object.fromEntries(formData.entries());
-      new SequenceGrid(beatData).init();
+      this.store.setConfig(beatData);
+      console.log(this.store);
     });
   }
 }
