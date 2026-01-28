@@ -7,6 +7,7 @@ export class SequenceStore extends EventTarget {
       barCount: 4,
       rows: [],
     };
+    this.nextRowId = 0;
   }
 
   setConfig(config) {
@@ -15,13 +16,15 @@ export class SequenceStore extends EventTarget {
   }
 
   addRow(row) {
-    this.state.rows.push({ ...row, id: this.state.rows.length });
+    this.state.rows.push({
+      ...row,
+      id: this.nextRowId++,
+    });
     this.dispatchEvent(new Event("change"));
   }
 
   removeRow(rowID) {
-    // const row = this.state.rows;
-    this.state.rows.filter((row) => row !== rowID);
+    this.state.rows = this.state.rows.filter((row) => row.id != rowID);
     this.dispatchEvent(new Event("change"));
   }
 
