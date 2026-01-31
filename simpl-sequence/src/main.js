@@ -9,6 +9,11 @@ apiHealthCheck();
 const initApp = () => {
   const DOMEntrypoint = document.querySelector("#app");
   const store = new SequenceStore();
+
+  store.addRow({
+    name: "default-bar",
+    steps: [],
+  });
   new SequenceForm(store, DOMEntrypoint).init();
   new SequenceGrid(store, DOMEntrypoint).init();
 };
