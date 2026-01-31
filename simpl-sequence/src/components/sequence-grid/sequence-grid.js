@@ -6,7 +6,6 @@ export class SequenceGrid {
     this.mountEl = mountEl;
     this.el = document.createElement("div");
     this.rowsEl = null;
-    this.handleAddRow = this.handleAddRow.bind(this);
   }
 
   init() {
@@ -17,33 +16,22 @@ export class SequenceGrid {
 
   render() {
     this.el.innerHTML = `
-      <button data-hook="add-beat-row">Add row</button>
-      <div class="rows" data-hook="rows"></div>
+      <button data-hook="add-row">Add row</button>
+      <div data-hook="rows"></div>
     `;
 
-    if (!this.el.isConnected) {
-      this.mountEl.appendChild(this.el);
-    }
-    this.rowsEl = this.el.querySelector('[data-hook="rows"]');
+    this.mountEl.appendChild(this.el);
+    this.rowsEl = this.el.querySelector("[data-hook='rows']");
 
     this.el
-      .querySelector('[data-hook="add-beat-row"]')
-      .addEventListener("click", this.handleAddRow);
-  }
-
-  handleAddRow() {
-    this.store.addRow({
-      name: "tester",
-      steps: [],
-    });
+      .querySelector("[data-hook='add-row']")
+      .addEventListener("click", () => this.store.addRow({ name: "New row" }));
   }
 
   renderRows() {
-    if (!this.rowsEl) return;
     this.rowsEl.innerHTML = "";
-
-    this.store.state.rows.forEach((rowData) => {
-      new GridRow(rowData, this.store, this.rowsEl).init();
-    });
+    this.store.state.rows.forEach((row) =>
+      new GridRow(row, this.store, this.rowsEl).init(),
+    );
   }
 }

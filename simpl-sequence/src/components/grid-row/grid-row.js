@@ -1,8 +1,10 @@
+import { GridBars } from "../grid-bars/grid-bars";
+
 export class GridRow {
   constructor(rowData, store, mountEl) {
-    this.rowData = rowData;
-    this.mountEl = mountEl;
+    this.row = rowData;
     this.store = store;
+    this.mountEl = mountEl;
     this.el = document.createElement("div");
     this.el.className = "grid-row";
   }
@@ -14,11 +16,14 @@ export class GridRow {
 
   render() {
     this.el.innerHTML = `
-    <span>${this.rowData.name} - ${JSON.stringify(this.rowData)}</span>
-    <button data-hook="delete-row">Delete row</button>
+      <span>${this.row.name}</span>
+      <button data-hook="delete">Delete</button>
     `;
+
+    new GridBars(this.row, this.store, this.el).init();
+
     this.el
-      .querySelector("button[data-hook='delete-row']")
-      .addEventListener("click", () => this.store.removeRow(this.rowData.id));
+      .querySelector("[data-hook='delete']")
+      .addEventListener("click", () => this.store.removeRow(this.row.id));
   }
 }

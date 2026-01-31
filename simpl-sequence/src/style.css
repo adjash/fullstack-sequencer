@@ -1,0 +1,10 @@
+.step.active {
+  background-color: darkslategrey;
+}
+.step {
+  padding: 1rem 0.25rem;
+  width: 40px;
+}
+.grid-row .grid-bars {
+  display: flex;
+}
