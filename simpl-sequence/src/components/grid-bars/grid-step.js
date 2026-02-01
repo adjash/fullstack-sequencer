@@ -13,10 +13,15 @@ export class GridStep {
   }
 
   render() {
-    this.el.className = this.row.steps[this.stepIndex] ? "step active" : "step";
+    const isActive = this.row.steps[this.stepIndex];
+    const isPlayingStep = this.store.state.currentStep === this.stepIndex;
 
-    this.el.addEventListener("click", () =>
-      this.store.toggleStep(this.row.id, this.stepIndex),
-    );
+    this.el.className = `
+    step
+    ${isActive ? "active" : ""}
+    ${isPlayingStep ? "playing" : ""}
+  `;
+
+    this.el.onclick = () => this.store.toggleStep(this.row.id, this.stepIndex);
   }
 }

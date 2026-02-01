@@ -1,61 +1,85 @@
 export class SequenceStore extends EventTarget {
   constructor() {
     super();
+
     this.state = {
       bpm: 80,
       beatsPerBar: 4,
       barCount: 8,
       rows: [],
+      currentStep: 0,
+      isPlaying: false,
     };
+
     this.nextRowId = 0;
+    this.timer = null;
   }
 
   get totalSteps() {
     return this.state.beatsPerBar * this.state.barCount;
   }
 
+  get stepMs() {
+    return 60000 / this.state.bpm;
+  }
+
+  play() {
+    if (this.timer) return;
+
+    this.state.isPlaying = true;
+    this.timer = setInterval(this.tick, this.stepMs);
+    this.emit();
+  }
+
+  stop() {
+    clearInterval(this.timer);
+    this.timer = null;
+
+    this.state.isPlaying = false;
+    this.state.currentStep = 0;
+    this.emit();
+  }
+
+  tick = () => {
+    this.state.currentStep = (this.state.currentStep + 1) % this.totalSteps;
+    this.emit();
+  };
+
   setConfig(config) {
     this.state = { ...this.state, ...config };
 
-    // resize all rows when config changes
     this.state.rows.forEach((row) => {
       row.steps.length = this.totalSteps;
-      row.steps.fill(
-        false,
-        row.steps.findIndex((s) => s === undefined),
-      );
+      row.steps.fill(false, row.steps.indexOf(undefined));
     });
 
-    this.dispatchEvent(new Event("change"));
+    this.emit();
   }
 
   addRow({ name }) {
-    const steps = Array(this.totalSteps).fill(false);
-
     this.state.rows.push({
       id: this.nextRowId++,
       name,
-      steps,
+      steps: Array(this.totalSteps).fill(false),
     });
 
-    this.dispatchEvent(new Event("change"));
+    this.emit();
   }
 
   removeRow(rowId) {
-    this.state.rows = this.state.rows.filter((row) => row.id !== rowId);
-    this.dispatchEvent(new Event("change"));
+    this.state.rows = this.state.rows.filter((r) => r.id !== rowId);
+    this.emit();
   }
 
-  //find the row in the array rows by matching rowId
-  //
   toggleStep(rowId, stepIndex) {
-    const row = this.state.rows.find((row) => row.id === rowId);
+    const row = this.state.rows.find((r) => r.id === rowId);
     if (!row) return;
-    // console.log(row);
-    // console.log(row.steps);
-    // console.log(stepIndex);
 
     row.steps[stepIndex] = !row.steps[stepIndex];
+    this.emit();
+  }
+
+  emit() {
     this.dispatchEvent(new Event("change"));
   }
 }
