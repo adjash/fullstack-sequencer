@@ -7,4 +7,21 @@
 }
 .grid-row .grid-bars {
   display: flex;
+  gap: 5px;
+}
+.grid-bar {
+  display: flex;
+  gap: 2px;
+}
+.grid-bar::after {
+  content: "-";
+  display: flex;
+  align-items: center;
+  margin-left: 3px;
+}
+.grid-bar:last-child::after {
+  display: none;
+}
+.step.playing {
+  outline: 2px solid yellow;
 }
