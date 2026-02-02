@@ -1,7 +1,14 @@
-const fetchAPI = async (endpoint, method = "GET") => {
+const fetchAPI = async (endpoint, method = "GET", body = null) => {
   try {
     const res = await (
-      await fetch(`http://localhost:3000/api${endpoint}`)
+      await fetch(`http://localhost:3000/api${endpoint}`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(body),
+      })
     ).json();
     console.log(res);
   } catch (err) {

@@ -5,7 +5,7 @@ export class SequenceStore extends EventTarget {
     this.state = {
       bpm: 80,
       beatsPerBar: 4,
-      barCount: 8,
+      barCount: 4,
       rows: [],
       currentStep: 0,
       isPlaying: false,

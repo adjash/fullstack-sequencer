@@ -1,7 +1,7 @@
 import fetchAPI from "./fetch";
 
 const apiHealthCheck = () => {
-  fetchAPI("/health");
+  fetchAPI("/health", "GET", null);
 };
 
 export default apiHealthCheck;
